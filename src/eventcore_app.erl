@@ -10,7 +10,10 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
-    eventcore_sup:start_link().
+    {ok, PID} = eventcore_sup:start_link(),
+	gen_event:add_handler({global, presence_handler}, presence_handler, []),
+	gen_event:add_handler({global, channel_handler}, channel_handler, []),
+	{ok, PID}.
 
 stop(_State) ->
     ok.
