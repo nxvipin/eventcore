@@ -1,0 +1,8 @@
+%% To be removed when this is release ready.
+
+application:start(crypto).
+application:start(ranch).
+application:start(cowboy).
+application:start(wsgateway).
+application:start(rpool).
+application:start(eventcore).
