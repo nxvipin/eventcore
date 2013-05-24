@@ -10,7 +10,7 @@
 -export([init/1]).
 
 %% Helper macro for declaring children of supervisor
--define(CHILD(I, Type, Options), {I, {I, start_link, [Options]}, permanent, 5000, Type, [I]}).
+-define(CHILD(Name, I, Type, Options), {Name, {I, start_link, [Options]}, permanent, 5000, Type, [I]}).
 
 %% ===================================================================
 %% API functions
@@ -24,6 +24,12 @@ start_link() ->
 %% ===================================================================
 
 init([]) ->
-    PresenceManager = ?CHILD(gen_event, worker, {global, presence_manager}),
-    {ok, { {one_for_one, 5, 10}, [PresenceManager]} }.
-
+	PresenceHandler = ?CHILD(gen_event_presence,
+							 gen_event,
+							 worker,
+							 {global, presence_handler}),
+	ChannelHandler = ?CHILD(gen_event_channel,
+							gen_event,
+							worker,
+							{global, channel_handler}),
+    {ok, { {one_for_one, 5, 10}, [PresenceHandler, ChannelHandler]}}.
